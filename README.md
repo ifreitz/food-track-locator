@@ -91,3 +91,5 @@ The only requirement for the assignment is that it give us at least 5 food truck
 1. Open the Swagger UI at `http://localhost:8000/swagger/`
 2. Click on the `Import Food Trucks` endpoint to import the food trucks data.
 3. Click on the `Food Truck List` endpoint to see the food trucks data.
+4. Click on the `Nearest Food Trucks` endpoint to see the nearest food trucks data.
+![alt text](image.png)
