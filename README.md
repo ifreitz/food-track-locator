@@ -1,7 +1,12 @@
-# My Django Project
+# RAKT's "Out-of-the-Box" Engineering Challenge
 
 ## Description
-This is a Django project that does XYZ. It is designed to help with ABC.
+The Problem : World Needs More Food Trucks!
+
+Our team in San Francisco are on a quest to discover the hidden gems of street food, particularly food trucks! Your challenge is to to make it possible for us to find a food truck no matter where our work takes us in the city.
+
+The only requirement for the assignment is that it give us at least 5 food trucks to choose from a particular latitude and longitude.
+
 
 ## Installation
 
@@ -81,8 +86,8 @@ This is a Django project that does XYZ. It is designed to help with ABC.
    GRANT ALL PRIVILEGES ON DATABASE fooddb TO fooddb_user;
    ```
 
-## Contributing
-Feel free to submit issues or pull requests for improvements.
+## How to test
 
-## License
-This project is licensed under the MIT License.
+1. Open the Swagger UI at `http://localhost:8000/swagger/`
+2. Click on the `Import Food Trucks` endpoint to import the food trucks data.
+3. Click on the `Food Truck List` endpoint to see the food trucks data.
