@@ -1,10 +1,14 @@
+import os
+
+from django.core.management import call_command
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.core.management import call_command
-import os
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from api.models import FoodTruck
+from api.serializers import FoodTruckSerializer
 
 
 class ImportFoodTrucksView(APIView):
@@ -56,3 +60,23 @@ class ImportFoodTrucksView(APIView):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class FoodTruckListView(APIView):
+    @swagger_auto_schema(
+        operation_description="Get all food trucks",
+        responses={
+            200: openapi.Response(
+                description="Food trucks retrieved successfully",
+                examples={
+                    "application/json": {
+                        "food_trucks": [{"id": 1, "name": "Food Truck 1"}, {"id": 2, "name": "Food Truck 2"}]
+                    }
+                }
+            )
+        }
+    )
+    def get(self, request):
+        food_trucks = FoodTruck.objects.all()
+        serializer = FoodTruckSerializer(food_trucks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

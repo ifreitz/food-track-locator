@@ -9,20 +9,40 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('csv_file', type=str, help='Path to the CSV file')
 
+    def parse_date(self, date_str):
+        if not date_str:
+            return None
+        try:
+            return datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
+        except ValueError:
+            try:
+                return datetime.strptime(date_str, '%Y%m%d')
+            except ValueError:
+                return None
+
     def handle(self, *args, **options):
         csv_file = options['csv_file']
         
         with open(csv_file, 'r') as file:
+            data = FoodTruck.objects.all()
+            if data.count() > 0:
+                self.stdout.write(
+                    self.style.WARNING(
+                        'Food truck data already exists. Skipping import.'
+                    )
+                )
+                return
+
             reader = csv.DictReader(file)
             trucks_created = 0
             
             for row in reader:
                 try:
                     # Convert date strings to datetime objects
-                    noi_sent = datetime.strptime(row['NOISent'], '%Y%m%d') if row['NOISent'] else None
-                    approved = datetime.strptime(row['Approved'], '%Y%m%d') if row['Approved'] else None
-                    received = datetime.strptime(row['Received'], '%Y%m%d')
-                    expiration = datetime.strptime(row['ExpirationDate'], '%Y%m%d')
+                    noi_sent = self.parse_date(row['NOISent'])
+                    approved = self.parse_date(row['Approved'])
+                    received = self.parse_date(row['Received'])
+                    expiration = self.parse_date(row['ExpirationDate'])
 
                     # Create FoodTruck instance
                     food_truck = FoodTruck(
@@ -47,7 +67,7 @@ class Command(BaseCommand):
                         noi_sent=noi_sent,
                         approved_date=approved,
                         received_date=received,
-                        prior_permit=bool(row['PriorPermit']),
+                        # prior_permit=bool(row['PriorPermit']),
                         expiration_date=expiration,
                         location=row['Location'],
                         fire_prevention_district=int(row['Fire Prevention Districts']),
